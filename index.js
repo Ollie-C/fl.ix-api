@@ -84,8 +84,7 @@ app
     const newComment = {
       id: crypto.randomBytes(16).toString("hex"),
       name: "User Name",
-      comment:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam sapiente, ab harum accusantium perferendis vero nesciunt saepe veniam unde sunt?",
+      comment: req.body.comment,
       likes: Math.floor(Math.random() * 1000),
       timestamp: Date.now(),
     };
@@ -95,6 +94,22 @@ app
     fs.writeFileSync("./data/videos.json", JSON.stringify(videosData));
     res.status(201).json(newComment);
   });
+
+app.put("/:videosId/likes", (req, res) => {
+  const videosData = JSON.parse(fs.readFileSync("./data/videos.json"));
+
+  // const updated = videosData.map((videos) )
+  videosData.find((video) => video.id === req.params.videosId).likes = `${
+    parseFloat(
+      videosData
+        .find((video) => video.id === req.params.videosId)
+        .likes.replace(/,/g, "")
+    ) + 3
+  }`;
+
+  fs.writeFileSync("./data/videos.json", JSON.stringify(videosData));
+  res.status(201).json(videosData);
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
