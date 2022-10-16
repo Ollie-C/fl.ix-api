@@ -33,29 +33,29 @@ app
     const videosData = JSON.parse(fs.readFileSync("./data/videos.json"));
     const newVideo = {
       id: crypto.randomBytes(16).toString("hex"),
-      title: req.query.title,
+      title: req.body.title,
       channel: "Red Cow",
       image: "https://i.imgur.com/l2Xfgpl.jpg",
-      description: req.query.description,
+      description: req.body.description,
       views: "1",
       likes: "1",
       duration: "3:00",
       video: "https://project-2-api.herokuapp.com/stream",
-      timestamp: 1626032763000, //to change
+      timestamp: req.body.timestamp,
       comments: [
         {
           id: crypto.randomBytes(16).toString("hex"),
           name: "Nice",
           comment: "Nice.",
           likes: 100,
-          timestamp: 1628522461000,
+          timestamp: req.body.timestamp,
         },
         {
           id: crypto.randomBytes(16).toString("hex"),
           name: "Nice",
           comment: "Nice.",
           likes: 10000,
-          timestamp: 1628522461000,
+          timestamp: req.body.timestamp,
         },
       ],
     };
