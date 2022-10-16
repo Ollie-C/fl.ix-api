@@ -97,16 +97,13 @@ app
 
 app.put("/:videosId/likes", (req, res) => {
   const videosData = JSON.parse(fs.readFileSync("./data/videos.json"));
-
-  // const updated = videosData.map((videos) )
   videosData.find((video) => video.id === req.params.videosId).likes = `${
     parseFloat(
       videosData
         .find((video) => video.id === req.params.videosId)
         .likes.replace(/,/g, "")
-    ) + 3
+    ) + 1
   }`;
-
   fs.writeFileSync("./data/videos.json", JSON.stringify(videosData));
   res.status(201).json(videosData);
 });
