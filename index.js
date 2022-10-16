@@ -13,15 +13,9 @@ const { PORT } = process.env;
 //MIDDLEWARE
 app.use(cors());
 app.use(express.json());
-//TEST
-app.use((req, res, next) => {
-  console.log(
-    `Incoming request: ${req.path}, Host: ${req.hostname} / IP: ${req.ip}`
-  );
-  next();
-});
 
-//GET DATA
+// videos
+
 app
   .route("/videos")
   .get((req, res) => {
@@ -63,7 +57,7 @@ app
     res.status(201).json(newVideo);
   });
 
-app.get("/:videosId", (req, res) => {
+app.get("/videos/:videosId", (req, res) => {
   const videosData = JSON.parse(fs.readFileSync("./data/videos.json"));
   const individualVideo = videosData.find(
     (video) => video.id === req.params.videosId
@@ -72,14 +66,14 @@ app.get("/:videosId", (req, res) => {
 });
 
 app
-  .get("/:videosId/comments", (req, res) => {
+  .get("/videos/:videosId/comments", (req, res) => {
     const videosData = JSON.parse(fs.readFileSync("./data/videos.json"));
     const individualVideoComments = videosData.find(
       (video) => video.id === req.params.videosId
     ).comments;
     res.status(200).json(individualVideoComments);
   })
-  .post("/:videosId/comments", (req, res) => {
+  .post("/videos/:videosId/comments", (req, res) => {
     const videosData = JSON.parse(fs.readFileSync("./data/videos.json"));
     const newComment = {
       id: crypto.randomBytes(16).toString("hex"),
@@ -95,7 +89,7 @@ app
     res.status(201).json(newComment);
   });
 
-app.put("/:videosId/likes", (req, res) => {
+app.put("/videos/:videosId/likes", (req, res) => {
   const videosData = JSON.parse(fs.readFileSync("./data/videos.json"));
   videosData.find((video) => video.id === req.params.videosId).likes = `${
     parseFloat(
@@ -107,6 +101,19 @@ app.put("/:videosId/likes", (req, res) => {
   fs.writeFileSync("./data/videos.json", JSON.stringify(videosData));
   res.status(201).json(videosData);
 });
+
+// app.delete("/:videosId/comments/:commentId", (req, res) => {
+//   const videosId = req.params.videosId;
+//   const commentId = req.params.commentId;
+
+//   const videosData = JSON.parse(fs.readFileSync("./data/videos.json"));
+
+//   delete videosData
+//     .find((video) => video.id == videosId)
+//     .comments.find((comment) => comment.id == commentId);
+//   fs.writeFileSync("./data/videos.json", JSON.stringify(videosData));
+//   res.send(videosData);
+// });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
