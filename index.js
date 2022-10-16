@@ -26,7 +26,6 @@ app
   .route("/videos")
   .get((req, res) => {
     const videosData = JSON.parse(fs.readFileSync("./data/videos.json"));
-    // const videosData = readData(); *DOESNT WORK*
     res.status(200).json(videosData);
   })
   .post((req, res) => {
@@ -63,6 +62,14 @@ app
     fs.writeFileSync("./data/videos.json", JSON.stringify(videosData));
     res.status(201).json(newVideo);
   });
+
+app.get("/:videosId", (req, res) => {
+  const videosData = JSON.parse(fs.readFileSync("./data/videos.json"));
+  const individualVideo = videosData.find(
+    (video) => video.id === req.params.videosId
+  );
+  res.status(200).json(individualVideo);
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
